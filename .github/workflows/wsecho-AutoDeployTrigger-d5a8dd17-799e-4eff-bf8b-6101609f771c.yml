@@ -1,0 +1,42 @@
+name: Trigger auto deployment for wsecho
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ master ]
+    paths:
+    - '**'
+    - '.github/workflows/wsecho-AutoDeployTrigger-d5a8dd17-799e-4eff-bf8b-6101609f771c.yml'
+
+  # Allow mannually trigger 
+  workflow_dispatch:
+      
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.WSECHO_AZURE_CREDENTIALS }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          appSourcePath: ${{ github.workspace }} 
+          registryUrl: funwithcontainers.azurecr.io
+          registryUsername: ${{ secrets.WSECHO_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.WSECHO_REGISTRY_PASSWORD }}
+          containerAppName: wsecho
+          resourceGroup: fun-with-azure
+          imageToBuild: funwithcontainers.azurecr.io/chat-server:${{ github.sha }}
+          
+
+     
+
