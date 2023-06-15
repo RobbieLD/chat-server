@@ -1,10 +1,14 @@
-const app = require('express')()
+const express = require('express')
+const app = express()
 const http = require('http').Server(app)
 const cors = require('cors')
 const io = require('socket.io')(http, { cors: { origin: "*" } })
 
 // Install the cors middleware
 app.use(cors())
+
+// Allow express to host static files
+app.use(express.static('.'))
 
 // We set the port this way to the environment variable PORT can override the default of 3000
 const port = process.env.PORT || 3000

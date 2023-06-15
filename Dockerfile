@@ -1,19 +1,26 @@
-FROM node:18
+FROM node:18 as client 
 
-# Create app directory
-WORKDIR /usr/src/app
+WORKDIR /build
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
+COPY Client/package*.json Client/tsconfig*.json ./
 
 RUN npm install
-# If you are building your code for production
-# RUN npm ci --omit=dev
 
-# Bundle app source
-COPY . .
+COPY Client/. .
 
-EXPOSE 8080
+RUN npm run build
+
+FROM node:18 as server
+
+WORKDIR /app
+
+COPY Server/package*.json ./
+
+RUN npm install
+
+COPY Server/. .
+
+COPY --from=client /build/dist ./
+
+# Run the server
 CMD [ "node", "index.js" ]
