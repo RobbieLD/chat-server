@@ -1,0 +1,43 @@
+// Colours
+$primary: rgb(8, 131, 94);
+$primary-contrast: rgb(255, 255, 255);
+$background: rgb(31, 20, 49);
+$text: rgb(0,0,0);
+$side-bar: #160b17;
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+#app {
+    height: 100%;
+}
+
+:root {
+    // Converting sass variables to css variables so we can use them outside of sass if we wanted to
+    --primary-color: #{$primary};
+    --primary-color-contrast: #{$primary-contrast};
+    --background-color: #{$background};
+    --text-color: #{$text};
+    --time-color: #{lighten($text, 50%)};
+    --users-panel-color: #{$side-bar};
+}
+
+button {
+    // This is an example of using the css variables, this doesn't need sass
+    background: var(--primary-color);
+    color: var(--primary-color-contrast);
+    border: none;
+    padding: 1em;
+    border-radius: 0.25em;   
+
+    // This is sass magic
+    &:hover {
+        background-color: lighten($primary, 10%);
+    }
+}
+
+

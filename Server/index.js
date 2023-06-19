@@ -13,7 +13,6 @@ app.use(express.static('.'))
 // We set the port this way to the environment variable PORT can override the default of 3000
 const port = process.env.PORT || 3000
 
-
 const htmlIndexHandler = (request, response) => {
     // Just sent back the html page
     response.sendFile(__dirname + '/index.html');
